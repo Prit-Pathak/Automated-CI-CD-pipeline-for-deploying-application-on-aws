@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/Prit-Pathak/Automated-CI-CD-pipeline-for-deploying-application-on-aws.git'  // Replace with your repository URL
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    sh 'terraform init'
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
+        stage('Install Nginx') {
+            steps {
+                script {
+                    sh 'ansible-playbook -i inventory.ini install_nginx.yml'
+                }
+            }
+        }
+    }
+}
